@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mattia — Data & Territory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0d0d0d;
+      --bg2:       #141414;
+      --bg3:       #1c1c1c;
+      --accent:    #c8a96e;
+      --accent2:   #6e9ec8;
+      --text:      #e8e4dc;
+      --muted:     #6b6760;
+      --border:    #2a2a2a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 4rem;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 4rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,169,110,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,169,110,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.4s;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      margin-top: 2rem;
+      max-width: 520px;
+      font-size: 1rem;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.6s;
+    }
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex; gap: 1.5rem; align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.8s;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn:hover { background: var(--accent); color: var(--bg); }
+    .btn-ghost {
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost:hover { background: var(--bg3); color: var(--text); }
+
+    .scroll-indicator {
+      position: absolute; bottom: 2rem; right: 4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      writing-mode: vertical-rl;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 1.2s;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 4rem; }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1; max-width: 60px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--bg2); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5px;
+      margin-top: 0;
+      background: var(--border);
+    }
+    .project-card {
+      background: var(--bg2);
+      padding: 2.5rem;
+      transition: background 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .project-card:hover { background: var(--bg3); }
+    .card-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+    .card-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .card-arrow {
+      margin-top: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .about-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.2;
+      position: sticky;
+      top: 8rem;
+    }
+    .about-title em { color: var(--accent); font-style: italic; }
+    .about-body p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+    .about-body p strong { color: var(--text); font-weight: 500; }
+    .skills-list {
+      margin-top: 2.5rem;
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+    }
+    .skill-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg2);
+      text-align: center;
+    }
+    #contact h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+    }
+    #contact h2 em { color: var(--accent); font-style: italic; }
+    #contact p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      font-size: 0.95rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .footer-lang {
+      display: flex; gap: 1rem;
+    }
+    .lang-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn.active, .lang-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 0 1.5rem 4rem; }
+      section { padding: 5rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-title { position: static; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">M.BIANCHI — DATA & TERRITORY</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <p class="hero-tag">Spatial Analysis · Electoral Data · GIS</p>
+    <h1>Maps that tell<br><em>political stories.</em></h1>
+    <p class="hero-sub">
+      I work at the intersection of geography, data, and politics —
+      turning electoral results into spatial narratives at the finest
+      granularity: the single sezione elettorale.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn">View Projects</a>
+      <a href="#about" class="btn btn-ghost">About Me</a>
+    </div>
+    <span class="scroll-indicator">Scroll</span>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Selected Work</div>
+    <div class="projects-grid">
+
+      <a class="project-card" href="projects/firenze-voto-2024.html">
+        <div class="card-year">2024 — 2025</div>
+        <span class="card-tag">Electoral Maps</span>
+        <h3 class="card-title">Voting Patterns in Florence & Sesto Fiorentino</h3>
+        <p class="card-desc">
+          Interactive maps at sezione elettorale level showing results,
+          percentage shifts, and turnout across Comunali 2024 and
+          Regionali 2025.
+        </p>
+        <div class="card-arrow">View project →</div>
+      </a>
+
+      <a class="project-card" href="#">
+        <div class="card-year">Coming soon</div>
+        <span class="card-tag">Geocoding</span>
+        <h3 class="card-title">Reconstructing Electoral Boundaries from Addresses</h3>
+        <p class="card-desc">
+          Automating the geocoding of 6,000+ addresses to reconstruct
+          the sezioni boundaries for Sesto Fiorentino from scratch.
+        </p>
+        <div class="card-arrow">Coming soon →</div>
+      </a>
+
+      <a class="project-card" href="#">
+        <div class="card-year">Coming soon</div>
+        <span class="card-tag">Analysis</span>
+        <h3 class="card-title">Left-Right Shifts Across Tuscany</h3>
+        <p class="card-desc">
+          A regional overview of political realignment between 2020 and
+          2025, with a focus on swing sezioni and turnout collapse.
+        </p>
+        <div class="card-arrow">Coming soon →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div>
+      <div class="section-label">About</div>
+      <h2 class="about-title">Data, maps,<br>and <em>politics.</em></h2>
+    </div>
+    <div class="about-body">
+      <p>
+        I'm <strong>Mattia</strong>, a researcher and analyst based in Florence.
+        I work with electoral and spatial data, combining GIS tools with
+        statistical analysis to understand how political behaviour varies
+        across urban and suburban territories.
+      </p>
+      <p>
+        My current focus is on <strong>Florence and Sesto Fiorentino</strong>,
+        where I am building a granular database of voting results at the
+        sezione elettorale level across multiple elections — from the 2024
+        Comunali to the 2025 Regionali.
+      </p>
+      <p>
+        I work primarily in <strong>R</strong> for data processing and spatial
+        joins, <strong>QGIS and ArcGIS Pro</strong> for cartography, and
+        open-web tools for interactive publishing.
+      </p>
+      <div class="skills-list">
+        <span class="skill-tag">R / sf / tidyr</span>
+        <span class="skill-tag">QGIS</span>
+        <span class="skill-tag">ArcGIS Pro</span>
+        <span class="skill-tag">Spatial Analysis</span>
+        <span class="skill-tag">Electoral Data</span>
+        <span class="skill-tag">Leaflet.js</span>
+        <span class="skill-tag">GeoPackage</span>
+        <span class="skill-tag">Geocoding</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label" style="justify-content:center">Get in touch</div>
+    <h2>Let's <em>talk.</em></h2>
+    <p>
+      Interested in collaboration, data, or just want to discuss
+      electoral geography? I'm always happy to connect.
+    </p>
+    <a href="mailto:your@email.com" class="btn">your@email.com</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Mattia Bianchi — Built with GitHub Pages</p>
+    <div class="footer-lang">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('it')">IT</button>
+    </div>
+  </footer>
+
+  <script>
+    // Language switcher placeholder — will expand when Italian version is ready
+    function setLang(lang) {
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      if (lang === 'it') {
+        alert('Italian version coming soon!');
+      }
+    }
+  </script>
+
+</body>
+</html>
