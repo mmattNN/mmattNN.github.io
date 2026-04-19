@@ -1,17 +1,17 @@
 {
   "name": "Mattia Niccoli",
-  "city": "Sesto Fiorentino, Florence",
+  "city": "Florence, Italy",
   "email": "niccoli.mattia@gmail.com",
   "linkedin": "https://www.linkedin.com/in/mattia-niccoli-2a18b31b4/",
-  "heroTag": "Geospatial Analysis · Earth Observation · Cartography",
+  "heroTag": "Geospatial Analysis · Earth Observation · GIS ·  Remote Sensing",
   "heroTitle": "Turning spatial data<br>into <em>geographic insight.</em>",
   "heroSub": "M.Sc. in Geography. Research Fellow at the Laboratory of Forest Geomatics, University of Florence. I work at the intersection of GIS, remote sensing, and data analysis — transforming heterogeneous geospatial data into knowledge for environmental management, urban planning, and beyond.",
   "heroBackground": "pictureNasa.jpg",
   "aboutTitle": "Geography,<br>data, and <em>method.</em>",
   "aboutTexts": [
-    "I'm <strong>Mattia Niccoli</strong>, a geographer and spatial analyst based in <strong>Sesto Fiorentino, Florence</strong>. My work sits at the intersection of Earth Observation, GIS, and quantitative geography — I apply these methods to extract strategic insights from spatial data across a range of domains: environmental management, urban climate, forest monitoring, and electoral geography.",
-    "I am currently a <strong>Research Fellow at GeoLAB</strong>, the Laboratory of Forest Geomatics at the University of Florence, where I work with heterogeneous geospatial data — satellite imagery, CLMS products, LiDAR, field data — across the full project cycle: data management, spatial and statistical analysis, cartographic production, and contributions to scientific publications.",
-    "I hold a <strong>Master's degree in Geography, Spatial Management and Heritage for International Cooperation</strong> (110/110 cum Laude) from the University of Florence, and a Bachelor's in Economics (110/110 cum Laude). I work primarily in <strong>R and Python</strong> for spatial analysis, and with <strong>ArcGIS Pro, QGIS, and Google Earth Engine</strong> for remote sensing and cartography."
+    "I'm <strong>Mattia Niccoli</strong>, a geographer and spatial analyst. My work sits at the intersection of Earth Observation, GIS, and quantitative geography — I apply these methods to extract strategic insights from spatial data across a range of domains: environmental management, urban climate, forest monitoring, and every domain where geographic thinking represents an added value.",
+    "I am currently a <strong>Research Fellow at GeoLAB</strong>, the Laboratory of Forest Geomatics at the University of Florence, where I work with heterogeneous geospatial data — satellite imagery,  geospatial dataset, LiDAR, georeferenced field data — across the full project cycle: data management, spatial and statistical analysis, cartographic production, and contributions to scientific publications.",
+    "I hold a <strong>Master's degree in Geography</strong> (110/110 cum Laude) from the University of Florence, and a Bachelor's in Economics (110/110 cum Laude). I work primarily in <strong>R and Python</strong> for spatial analysis, and with <strong>ArcGIS Pro, QGIS, and Google Earth Engine</strong> for remote sensing and cartography."
   ],
   "skills": [
     "ArcGIS Pro / Online",
@@ -44,20 +44,6 @@
       "tag": "Master's Thesis",
       "title": "Mapping Local Climate Zones in the Metropolitan Area of Florence",
       "desc": "Integrated multitemporal Sentinel-2 imagery with ancillary geospatial layers to produce a Local Climate Zone map of Florence using a Random Forest classifier. Published in Bollettino della Società Geografica Italiana.",
-      "link": "#"
-    },
-    {
-      "year": "2025 — present",
-      "tag": "Forest Geomatics",
-      "title": "Earth Observation for Forest and Urban Monitoring",
-      "desc": "Research at GeoLAB involving satellite imagery, LiDAR, and CLMS products for forest mapping, urban climate analysis, and biodiversity monitoring. Several articles under review in international journals.",
-      "link": "#"
-    },
-    {
-      "year": "Coming soon",
-      "tag": "Geocoding",
-      "title": "Reconstructing Electoral Boundaries from Addresses",
-      "desc": "Automating the geocoding of 6,000+ addresses to reconstruct sezioni elettorali boundaries for Sesto Fiorentino from scratch using tidygeocoder in R.",
       "link": "#"
     }
   ]
