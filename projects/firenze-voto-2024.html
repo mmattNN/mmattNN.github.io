@@ -82,14 +82,35 @@
     .bar-chart-wrap{height:calc(100% - 20px);}
 
     /* ── MOBILE LAYOUT ── */
-    /* Mobile tab content areas */
-    .mobile-tab-content{display:none;flex:1;flex-direction:column;overflow:hidden;}
-    .mobile-tab-content.active{display:flex;}
-
     /* Mobile controls drawer */
     .mobile-controls{background:var(--bg2);border-bottom:1px solid var(--border);padding:.7rem 1rem;flex-shrink:0;}
     .mobile-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
     .mobile-controls .toggle-row{margin-top:.5rem;}
+
+    /* Mobile map overlay — sits on top of desktop layout on mobile */
+    .mobile-map-layer{
+      display:none;
+      position:fixed;
+      left:0; right:0;
+      z-index:50;
+      background:var(--bg);
+      flex-direction:column;
+    }
+    .mobile-map-layer.active{ display:flex; }
+    /* #map inside mobile-map-layer needs explicit height */
+    .mobile-map-layer #map{ width:100%; }
+
+    /* Mobile sliding panels */
+    .mobile-panel{
+      display:none;
+      position:fixed;
+      left:0; right:0;
+      z-index:50;
+      background:var(--bg);
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .mobile-panel.active{ display:flex; }
 
     /* Mobile info panel */
     .mobile-info-panel{flex:1;overflow-y:auto;padding:1rem;}
@@ -106,11 +127,10 @@
     .mobile-bar-wrap{height:180px;}
 
     /* Bottom tab bar — mobile only */
-    .tab-bar{display:none;height:var(--tabbar);background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0;z-index:300;}
+    .tab-bar{display:none;height:var(--tabbar);background:var(--bg2);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:300;}
     .tab-bar-inner{display:flex;height:100%;}
-    .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;transition:color .2s;color:var(--muted);}
+    .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;transition:color .2s;color:var(--muted);position:relative;}
     .tab-btn.active{color:var(--accent);}
-    .tab-btn:hover{color:var(--text);}
     .tab-icon{font-size:1.1rem;line-height:1;}
     .tab-label{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;}
     .tab-indicator{position:absolute;top:0;left:10%;right:10%;height:2px;background:var(--accent);border-radius:0 0 2px 2px;display:none;}
@@ -129,25 +149,24 @@
 
     /* ── RESPONSIVE SWITCH ── */
     @media (max-width: 700px) {
-      /* hide desktop elements */
-      .panel, .bar-section { display: none !important; }
+      /* Hide desktop layout */
+      .panel, .bar-section, #desktopDashboard { display: none !important; }
       .topbar-title { display: none; }
-      .topbar-right-controls .ctrl-label { display: none; }
       .search-wrap { max-width: none; }
-
-      /* show mobile elements */
-      .tab-bar { display: flex; position: relative; }
-      .dashboard { flex-direction: column; }
-      .map-wrap { position: relative; }
-
-      /* basemap buttons smaller */
+      .topbar-right-controls .ctrl-label { display: none; }
       .bm-btn, .layer-toggle-btn { font-size:.52rem; padding:.22rem .45rem; }
+
+      /* Show mobile elements */
+      .tab-bar { display: flex; }
+      .mobile-map-layer, .mobile-panel { /* shown by JS via .active class */ }
+
+      /* Hide the body's flex layout — mobile uses fixed positioning */
+      body { overflow: hidden; }
     }
 
     @media (min-width: 701px) {
-      /* hide mobile tab content, show desktop panel */
-      .mobile-tab-content { display: none !important; }
-      /* the map tab content IS the map-wrap — handled in JS */
+      .tab-bar { display: none !important; }
+      .mobile-map-layer, .mobile-panel { display: none !important; }
     }
   </style>
 </head>
@@ -239,10 +258,10 @@
   </div>
 </div>
 
-<!-- ── MOBILE TABS CONTENT ── -->
-<!-- Mobile Map Tab -->
-<div class="mobile-tab-content active" id="mobileMapTab">
-  <!-- Controls -->
+<!-- ── MOBILE LAYOUT (fixed panels, shown/hidden by JS) ── -->
+
+<!-- Mobile Map Panel -->
+<div class="mobile-map-layer active" id="mobileMapPanel">
   <div class="mobile-controls">
     <div class="mobile-controls-grid">
       <div class="control-group" style="margin:0">
@@ -263,18 +282,18 @@
       <button class="toggle-btn" data-mmetric="voti">Abs. Votes</button>
     </div>
   </div>
-  <!-- Mobile map lives here — the actual #map div is moved here on mobile -->
-  <div id="mobileMapContainer" style="flex:1;position:relative;"></div>
+  <!-- Map renders here via JS explicit height -->
+  <div id="mobileMapSlot" style="flex:1;position:relative;overflow:hidden;"></div>
 </div>
 
-<!-- Mobile Charts Tab -->
-<div class="mobile-tab-content" id="mobileChartsTab">
+<!-- Mobile Charts Panel -->
+<div class="mobile-panel" id="mobileChartsPanel">
   <div class="mobile-charts-panel">
     <div class="mobile-chart-block">
-      <div class="mobile-chart-title">Sezione breakdown — click a sezione on the map first</div>
+      <div class="mobile-chart-title">Sezione breakdown — tap a sezione on the map first</div>
       <div class="mobile-pie-wrap">
-        <p class="chart-empty" id="m_pieEmpty" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">Tap a sezione on the map</p>
-        <canvas id="m_pieChart" style="display:none;width:100%;height:100%"></canvas>
+        <p class="chart-empty" id="m_pieEmpty" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;text-align:center">Tap a sezione on the map</p>
+        <canvas id="m_pieChart" style="display:none;"></canvas>
       </div>
     </div>
     <div class="mobile-chart-block">
@@ -284,8 +303,8 @@
   </div>
 </div>
 
-<!-- Mobile Info Tab -->
-<div class="mobile-tab-content" id="mobileInfoTab">
+<!-- Mobile Info Panel -->
+<div class="mobile-panel" id="mobileInfoPanel">
   <div class="mobile-info-panel">
     <div class="mobile-section">
       <div class="mobile-section-title">Selected Sezione</div>
@@ -303,7 +322,7 @@
     <div class="mobile-section">
       <div class="mobile-section-title">How to use</div>
       <p style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);line-height:1.7;letter-spacing:.04em">
-        1. Select election, party and metric above the map.<br>
+        1. Select election, party and metric on the Map tab.<br>
         2. Tap any sezione on the map to lock it.<br>
         3. Switch to Charts tab to see the breakdown.<br>
         4. Tap the same sezione again to deselect.
@@ -393,12 +412,89 @@ const state = {
   locked:null, layerOn:true, data:{}, isMobile: false
 }
 
-// ── MOBILE DETECTION ──────────────────────────────────────────────────────────
-function checkMobile() {
-  return window.innerWidth <= 700
+// ── MOBILE DETECTION & LAYOUT ─────────────────────────────────────────────────
+function checkMobile(){ return window.innerWidth <= 700 }
+
+function setMobilePanelHeights(){
+  const topbar = document.querySelector('.topbar').offsetHeight
+  const tabbar = document.querySelector('.tab-bar').offsetHeight
+  const controls = document.querySelector('.mobile-controls')?.offsetHeight || 0
+  const screenH = window.innerHeight
+
+  // Map panel: topbar → bottom of screen - tabbar
+  const mapPanel = document.getElementById('mobileMapPanel')
+  mapPanel.style.top    = topbar + 'px'
+  mapPanel.style.bottom = tabbar + 'px'
+  mapPanel.style.left   = '0'
+  mapPanel.style.right  = '0'
+
+  // Map slot height = panel height - controls height
+  const mapSlotH = screenH - topbar - tabbar - controls
+  const mapSlot = document.getElementById('mobileMapSlot')
+  mapSlot.style.height = mapSlotH + 'px'
+
+  // Other panels: same position as map panel
+  ;['mobileChartsPanel','mobileInfoPanel'].forEach(id=>{
+    const el = document.getElementById(id)
+    el.style.top    = topbar + 'px'
+    el.style.bottom = tabbar + 'px'
+    el.style.left   = '0'
+    el.style.right  = '0'
+  })
 }
 
-// ── MAP SETUP ─────────────────────────────────────────────────────────────────
+function setupMobile(){
+  // Move #map and loading into mobileMapSlot
+  const mapEl     = document.getElementById('map')
+  const loadingEl = document.getElementById('loading')
+  const slot      = document.getElementById('mobileMapSlot')
+  mapEl.style.width  = '100%'
+  mapEl.style.height = '100%'
+  mapEl.style.flex   = 'none'
+  slot.appendChild(mapEl)
+  slot.appendChild(loadingEl)
+
+  setMobilePanelHeights()
+  setTimeout(()=>map.invalidateSize(), 150)
+}
+
+function setupDesktop(){
+  // Move #map back to desktop wrapper
+  const mapEl     = document.getElementById('map')
+  const loadingEl = document.getElementById('loading')
+  const desktopWrap = document.querySelector('.map-wrap > div')
+  mapEl.style.width  = ''
+  mapEl.style.height = ''
+  mapEl.style.flex   = '1'
+  desktopWrap.appendChild(mapEl)
+  desktopWrap.appendChild(loadingEl)
+  setTimeout(()=>map.invalidateSize(), 150)
+}
+
+let currentlyMobile = null
+
+function applyLayout(){
+  const isMobile = checkMobile()
+  if(isMobile === currentlyMobile) return
+  currentlyMobile = isMobile
+
+  if(isMobile){
+    document.getElementById('desktopDashboard').style.display = 'none'
+    setupMobile()
+  } else {
+    document.getElementById('desktopDashboard').style.display = 'flex'
+    // Reset mobile panels
+    ;['mobileMapPanel','mobileChartsPanel','mobileInfoPanel'].forEach(id=>{
+      document.getElementById(id).classList.remove('active')
+    })
+    setupDesktop()
+  }
+}
+
+window.addEventListener('resize', ()=>{
+  applyLayout()
+  if(checkMobile()) setMobilePanelHeights()
+})
 const map = L.map('map', { zoomControl:false, tap:true }).setView([43.775, 11.255], 13)
 L.control.zoom({ position:'bottomright' }).addTo(map)
 
@@ -652,7 +748,6 @@ function renderMap(geojson){
   updateBarChart(geojson)
 }
 
-// Mobile: briefly flash the info tab button when sezione is selected
 function showTabHint(){
   const infoBtn = document.querySelector('[data-tab="mobileInfoTab"]')
   if(!infoBtn) return
@@ -817,19 +912,22 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'))
     btn.classList.add('active')
-    document.querySelectorAll('.mobile-tab-content').forEach(t=>t.classList.remove('active'))
-    document.getElementById(btn.dataset.tab).classList.add('active')
-    btn.style.color=''
-    // Invalidate map when switching back to map tab
+    // Show the right panel
+    const panels = {
+      'mobileMapTab':    'mobileMapPanel',
+      'mobileChartsTab': 'mobileChartsPanel',
+      'mobileInfoTab':   'mobileInfoPanel'
+    }
+    Object.values(panels).forEach(id=>document.getElementById(id).classList.remove('active'))
+    document.getElementById(panels[btn.dataset.tab]).classList.add('active')
+    btn.style.color = ''
     if(btn.dataset.tab==='mobileMapTab') setTimeout(()=>map.invalidateSize(),50)
-    // Resize charts when switching to charts tab
-    if(btn.dataset.tab==='mobileChartsTab') setTimeout(()=>Object.values(barCharts).forEach(c=>c.resize()),50)
+    if(btn.dataset.tab==='mobileChartsTab') setTimeout(()=>Object.values(barCharts).forEach(c=>c.resize()),80)
   })
 })
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-state.isMobile = checkMobile()
-relocateMap()
+applyLayout()
 populatePartySelects()
 update()
 </script>
