@@ -1,0 +1,49 @@
+{
+  "name": "Mattia Niccoli",
+  "city": "Florence",
+  "email": "mattia@example.com",
+  "heroTag": "Spatial Analysis · Electoral Data · GIS",
+  "heroTitle": "Maps that tell<br><em>political stories.</em>",
+  "heroSub": "I work at the intersection of geography, data, and politics — turning electoral results into spatial narratives at the finest granularity: the single sezione elettorale.",
+  "aboutTitle": "Data, maps,<br>and <em>politics.</em>",
+  "aboutTexts": [
+    "I'm <strong>Mattia Niccoli</strong>, a researcher and analyst based in <strong>Florence</strong>. I work with electoral and spatial data, combining GIS tools with statistical analysis to understand how political behaviour varies across urban and suburban territories.",
+    "My current focus is on <strong>Florence and Sesto Fiorentino</strong>, where I am building a granular database of voting results at the sezione elettorale level across multiple elections — from the 2024 Comunali to the 2025 Regionali.",
+    "I work primarily in <strong>R</strong> for data processing and spatial joins, <strong>QGIS and ArcGIS Pro</strong> for cartography, and open-web tools for interactive publishing."
+  ],
+  "skills": [
+    "R / sf / tidyr",
+    "QGIS",
+    "ArcGIS Pro",
+    "Spatial Analysis",
+    "Electoral Data",
+    "Leaflet.js",
+    "GeoPackage",
+    "Geocoding"
+  ],
+  "contactDesc": "Interested in collaboration, data, or just want to discuss electoral geography? I'm always happy to connect.",
+  "footerText": "© 2025 Mattia Niccoli — Built with GitHub Pages",
+  "projects": [
+    {
+      "year": "2024 — 2025",
+      "tag": "Electoral Maps",
+      "title": "Voting Patterns in Florence & Sesto Fiorentino",
+      "desc": "Interactive maps at sezione elettorale level showing results, percentage shifts, and turnout across Comunali 2024 and Regionali 2025.",
+      "link": "projects/firenze-voto-2024.html"
+    },
+    {
+      "year": "Coming soon",
+      "tag": "Geocoding",
+      "title": "Reconstructing Electoral Boundaries from Addresses",
+      "desc": "Automating the geocoding of 6,000+ addresses to reconstruct the sezioni boundaries for Sesto Fiorentino from scratch.",
+      "link": "#"
+    },
+    {
+      "year": "Coming soon",
+      "tag": "Analysis",
+      "title": "Left-Right Shifts Across Tuscany",
+      "desc": "A regional overview of political realignment between 2020 and 2025, with a focus on swing sezioni and turnout collapse.",
+      "link": "#"
+    }
+  ]
+}
