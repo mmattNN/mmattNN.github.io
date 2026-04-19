@@ -1,462 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mattia — Data & Territory</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:        #0d0d0d;
-      --bg2:       #141414;
-      --bg3:       #1c1c1c;
-      --accent:    #c8a96e;
-      --accent2:   #6e9ec8;
-      --text:      #e8e4dc;
-      --muted:     #6b6760;
-      --border:    #2a2a2a;
+      --bg:#0d0d0d; --bg2:#141414; --bg3:#1c1c1c;
+      --accent:#c8a96e; --accent2:#6e9ec8;
+      --text:#e8e4dc; --muted:#6b6760; --border:#2a2a2a;
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden;}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 4rem;background:rgba(13,13,13,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+    .nav-logo{font-family:'DM Mono',monospace;font-size:.85rem;color:var(--accent);letter-spacing:.12em;text-decoration:none;}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .nav-right{display:flex;align-items:center;gap:1.2rem;}
+    .edit-toggle-btn{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;padding:.3rem .8rem;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
+    .edit-toggle-btn:hover,.edit-toggle-btn.active{border-color:var(--accent);color:var(--accent);}
 
-    html { scroll-behavior: smooth; }
+    /* HERO */
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 4rem 6rem;position:relative;overflow:hidden;}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,169,110,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,169,110,.04) 1px,transparent 1px);background-size:60px 60px;}
+    .hero-tag{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s ease forwards .2s;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,7vw,6.5rem);font-weight:900;line-height:1.05;max-width:800px;opacity:0;animation:fadeUp .8s ease forwards .4s;}
+    .hero h1 em{font-style:italic;color:var(--accent);}
+    .hero-sub{margin-top:2rem;max-width:520px;font-size:1rem;color:var(--muted);opacity:0;animation:fadeUp .8s ease forwards .6s;}
+    .hero-cta{margin-top:3rem;display:flex;gap:1.5rem;align-items:center;opacity:0;animation:fadeUp .8s ease forwards .8s;}
+    .btn{display:inline-block;padding:.75rem 2rem;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--accent);color:var(--accent);transition:background .2s,color .2s;}
+    .btn:hover{background:var(--accent);color:var(--bg);}
+    .btn-ghost{border-color:var(--border);color:var(--muted);}
+    .btn-ghost:hover{background:var(--bg3);color:var(--text);}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
+    /* PROJECTS */
+    #projects{padding:7rem 4rem;background:var(--bg2);}
+    .section-label{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:3rem;display:flex;align-items:center;gap:1rem;}
+    .section-label::after{content:'';flex:1;max-width:60px;height:1px;background:var(--accent);opacity:.4;}
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5px;background:var(--border);}
+    .project-card{background:var(--bg2);padding:2.5rem;transition:background .2s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+    .project-card:hover{background:var(--bg3);}
+    .card-year{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.1em;margin-bottom:1.2rem;}
+    .card-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;padding:.2rem .6rem;border:1px solid var(--accent2);color:var(--accent2);letter-spacing:.08em;margin-bottom:1rem;}
+    .card-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;line-height:1.3;margin-bottom:1rem;}
+    .card-desc{font-size:.9rem;color:var(--muted);line-height:1.6;}
+    .card-arrow{margin-top:2rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--accent);letter-spacing:.1em;}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.4rem 4rem;
-      background: rgba(13,13,13,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text); }
+    /* ABOUT */
+    #about{padding:7rem 4rem;display:grid;grid-template-columns:1fr 1.6fr;gap:6rem;align-items:start;}
+    .about-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:900;line-height:1.2;position:sticky;top:8rem;}
+    .about-title em{color:var(--accent);font-style:italic;}
+    .about-body p{font-size:1rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.8;}
+    .about-body p strong{color:var(--text);font-weight:500;}
+    .skills-list{margin-top:2.5rem;display:flex;flex-wrap:wrap;gap:.6rem;}
+    .skill-tag{font-family:'DM Mono',monospace;font-size:.7rem;padding:.3rem .8rem;border:1px solid var(--border);color:var(--muted);letter-spacing:.08em;}
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 4rem 6rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(200,169,110,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,169,110,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-    .hero-tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.2s;
-    }
-    .hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 7vw, 6.5rem);
-      font-weight: 900;
-      line-height: 1.05;
-      max-width: 800px;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.4s;
-    }
-    .hero h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-    .hero-sub {
-      margin-top: 2rem;
-      max-width: 520px;
-      font-size: 1rem;
-      color: var(--muted);
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.6s;
-    }
-    .hero-cta {
-      margin-top: 3rem;
-      display: flex; gap: 1.5rem; align-items: center;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.8s;
-    }
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 2rem;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      transition: background 0.2s, color 0.2s;
-    }
-    .btn:hover { background: var(--accent); color: var(--bg); }
-    .btn-ghost {
-      border-color: var(--border);
-      color: var(--muted);
-    }
-    .btn-ghost:hover { background: var(--bg3); color: var(--text); }
+    /* CONTACT */
+    #contact{padding:7rem 4rem;background:var(--bg2);text-align:center;}
+    #contact h2{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;margin-bottom:1.5rem;}
+    #contact h2 em{color:var(--accent);font-style:italic;}
+    #contact p{color:var(--muted);max-width:480px;margin:0 auto 3rem;font-size:.95rem;}
 
-    .scroll-indicator {
-      position: absolute; bottom: 2rem; right: 4rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.15em;
-      writing-mode: vertical-rl;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1.2s;
-    }
+    /* FOOTER */
+    footer{padding:2rem 4rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+    footer p{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.08em;}
+    .footer-lang{display:flex;gap:1rem;}
+    .lang-btn{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:.3rem .7rem;cursor:pointer;transition:all .2s;}
+    .lang-btn.active,.lang-btn:hover{color:var(--accent);border-color:var(--accent);}
 
-    /* ── SECTION BASE ── */
-    section { padding: 7rem 4rem; }
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 3rem;
-      display: flex; align-items: center; gap: 1rem;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1; max-width: 60px;
-      height: 1px;
-      background: var(--accent);
-      opacity: 0.4;
-    }
+    /* ── EDIT PANEL ── */
+    .edit-panel{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--bg2);border-left:1px solid var(--border);z-index:200;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;overflow:hidden;}
+    .edit-panel.open{transform:translateX(0);}
+    .edit-panel-header{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+    .edit-panel-title{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;}
+    .edit-panel-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;transition:color .2s;}
+    .edit-panel-close:hover{color:var(--text);}
+    .edit-panel-body{flex:1;overflow-y:auto;padding:1.2rem 1.4rem;}
+    .edit-panel-body::-webkit-scrollbar{width:3px;}
+    .edit-panel-body::-webkit-scrollbar-thumb{background:var(--border);}
+    .edit-section{margin-bottom:1.8rem;}
+    .edit-section-title{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
+    .edit-field{margin-bottom:.9rem;}
+    .edit-field label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.1em;display:block;margin-bottom:.3rem;}
+    .edit-field input,.edit-field textarea{width:100%;background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:.45rem .6rem;font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s;resize:vertical;}
+    .edit-field input:focus,.edit-field textarea:focus{border-color:var(--accent);}
+    .edit-field textarea{min-height:60px;line-height:1.5;}
+    .project-form{background:var(--bg3);padding:.8rem;border:1px solid var(--border);border-radius:2px;margin-bottom:.8rem;}
+    .add-btn,.remove-btn{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.08em;padding:.35rem .7rem;margin-top:.6rem;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all .2s;}
+    .add-btn:hover{color:var(--accent);border-color:var(--accent);}
+    .remove-btn{color:#9b5555;border-color:#9b5555;}
+    .remove-btn:hover{background:#9b5555;color:var(--bg);}
+    .edit-panel-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:.6rem;}
+    .save-btn{padding:.55rem;font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;cursor:pointer;transition:opacity .2s;}
+    .save-btn:hover{opacity:.85;}
+    .export-btn{padding:.55rem;font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
+    .export-btn:hover{color:var(--text);border-color:var(--muted);}
+    .import-wrap{display:flex;gap:.4rem;}
+    .import-wrap input[type="file"]{display:none;}
+    .import-btn{flex:1;padding:.55rem;font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
+    .import-btn:hover{color:var(--text);border-color:var(--muted);}
+    .save-notice{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.06em;margin-top:.5rem;text-align:center;display:none;}
 
-    /* ── PROJECTS ── */
-    #projects { background: var(--bg2); }
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5px;
-      margin-top: 0;
-      background: var(--border);
-    }
-    .project-card {
-      background: var(--bg2);
-      padding: 2.5rem;
-      transition: background 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .project-card:hover { background: var(--bg3); }
-    .card-year {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 1.2rem;
-    }
-    .card-tag {
-      display: inline-block;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      padding: 0.2rem 0.6rem;
-      border: 1px solid var(--accent2);
-      color: var(--accent2);
-      letter-spacing: 0.08em;
-      margin-bottom: 1rem;
-    }
-    .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 1rem;
-    }
-    .card-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-    .card-arrow {
-      margin-top: 2rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 6rem;
-      align-items: start;
-    }
-    .about-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      font-weight: 900;
-      line-height: 1.2;
-      position: sticky;
-      top: 8rem;
-    }
-    .about-title em { color: var(--accent); font-style: italic; }
-    .about-body p {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
-    }
-    .about-body p strong { color: var(--text); font-weight: 500; }
-    .skills-list {
-      margin-top: 2.5rem;
-      display: flex; flex-wrap: wrap; gap: 0.6rem;
-    }
-    .skill-tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.3rem 0.8rem;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      letter-spacing: 0.08em;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--bg2);
-      text-align: center;
-    }
-    #contact h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 900;
-      margin-bottom: 1.5rem;
-    }
-    #contact h2 em { color: var(--accent); font-style: italic; }
-    #contact p {
-      color: var(--muted);
-      max-width: 480px;
-      margin: 0 auto 3rem;
-      font-size: 0.95rem;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      padding: 2rem 4rem;
-      border-top: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    footer p {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-    }
-    .footer-lang {
-      display: flex; gap: 1rem;
-    }
-    .lang-btn {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: none;
-      border: 1px solid var(--border);
-      padding: 0.3rem 0.7rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .lang-btn.active, .lang-btn:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { display: none; }
-      .hero { padding: 0 1.5rem 4rem; }
-      section { padding: 5rem 1.5rem; }
-      #about { grid-template-columns: 1fr; gap: 3rem; }
-      .about-title { position: static; }
-      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:768px){
+      nav{padding:1.2rem 1.5rem;}
+      .nav-links{display:none;}
+      .hero,.#projects,#about,#contact,footer{padding-left:1.5rem;padding-right:1.5rem;}
+      #about{grid-template-columns:1fr;gap:3rem;}
+      .about-title{position:static;}
+      footer{flex-direction:column;gap:1rem;text-align:center;}
+      .edit-panel{width:100%;}
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">M.BIANCHI — DATA & TERRITORY</a>
-    <ul class="nav-links">
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">M.NICCOLI — DATA & TERRITORY</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <ul class="nav-links" style="margin:0">
+      <li><button class="lang-btn active" onclick="setLang('en')">EN</button></li>
+      <li><button class="lang-btn" onclick="setLang('it')">IT</button></li>
     </ul>
-  </nav>
+    <button class="edit-toggle-btn" id="editToggleBtn">✎ Edit</button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-grid"></div>
-    <p class="hero-tag">Spatial Analysis · Electoral Data · GIS</p>
-    <h1>Maps that tell<br><em>political stories.</em></h1>
-    <p class="hero-sub">
-      I work at the intersection of geography, data, and politics —
-      turning electoral results into spatial narratives at the finest
-      granularity: the single sezione elettorale.
-    </p>
-    <div class="hero-cta">
-      <a href="#projects" class="btn">View Projects</a>
-      <a href="#about" class="btn btn-ghost">About Me</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <p class="hero-tag" id="heroTag"></p>
+  <h1 id="heroTitle"></h1>
+  <p class="hero-sub" id="heroSub"></p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn">View Projects</a>
+    <a href="#about" class="btn btn-ghost">About Me</a>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Selected Work</div>
+  <div class="projects-grid" id="projectsGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <div class="section-label">About</div>
+    <h2 class="about-title" id="aboutTitle"></h2>
+  </div>
+  <div class="about-body">
+    <div id="aboutContent"></div>
+    <div class="skills-list" id="skillsList"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center">Get in touch</div>
+  <h2>Let's <em>talk.</em></h2>
+  <p id="contactDesc"></p>
+  <a href="#" class="btn" id="contactEmail"></a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p id="footerText"></p>
+  <div class="footer-lang">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('it')">IT</button>
+  </div>
+</footer>
+
+<!-- EDIT PANEL -->
+<div class="edit-panel" id="editPanel">
+  <div class="edit-panel-header">
+    <span class="edit-panel-title">✎ Manage Content (JSON)</span>
+    <button class="edit-panel-close" id="editClose">✕</button>
+  </div>
+  <div class="edit-panel-body">
+
+    <div class="edit-section">
+      <div class="edit-section-title">Identity & Contact</div>
+      <div class="edit-field"><label>Your name</label><input type="text" id="nameInput"/></div>
+      <div class="edit-field"><label>City</label><input type="text" id="cityInput"/></div>
+      <div class="edit-field"><label>Email</label><input type="email" id="emailInput"/></div>
     </div>
-    <span class="scroll-indicator">Scroll</span>
-  </section>
 
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="section-label">Selected Work</div>
-    <div class="projects-grid">
-
-      <a class="project-card" href="projects/firenze-voto-2024.html">
-        <div class="card-year">2024 — 2025</div>
-        <span class="card-tag">Electoral Maps</span>
-        <h3 class="card-title">Voting Patterns in Florence & Sesto Fiorentino</h3>
-        <p class="card-desc">
-          Interactive maps at sezione elettorale level showing results,
-          percentage shifts, and turnout across Comunali 2024 and
-          Regionali 2025.
-        </p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a class="project-card" href="#">
-        <div class="card-year">Coming soon</div>
-        <span class="card-tag">Geocoding</span>
-        <h3 class="card-title">Reconstructing Electoral Boundaries from Addresses</h3>
-        <p class="card-desc">
-          Automating the geocoding of 6,000+ addresses to reconstruct
-          the sezioni boundaries for Sesto Fiorentino from scratch.
-        </p>
-        <div class="card-arrow">Coming soon →</div>
-      </a>
-
-      <a class="project-card" href="#">
-        <div class="card-year">Coming soon</div>
-        <span class="card-tag">Analysis</span>
-        <h3 class="card-title">Left-Right Shifts Across Tuscany</h3>
-        <p class="card-desc">
-          A regional overview of political realignment between 2020 and
-          2025, with a focus on swing sezioni and turnout collapse.
-        </p>
-        <div class="card-arrow">Coming soon →</div>
-      </a>
-
+    <div class="edit-section">
+      <div class="edit-section-title">Hero Section</div>
+      <div class="edit-field"><label>Tag</label><input type="text" id="heroTagInput"/></div>
+      <div class="edit-field"><label>Title (use &lt;em&gt; for italic)</label><input type="text" id="heroTitleInput"/></div>
+      <div class="edit-field"><label>Subtitle</label><textarea id="heroSubInput"></textarea></div>
     </div>
-  </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div>
-      <div class="section-label">About</div>
-      <h2 class="about-title">Data, maps,<br>and <em>politics.</em></h2>
+    <div class="edit-section">
+      <div class="edit-section-title">About Section</div>
+      <div class="edit-field"><label>Title (use &lt;em&gt; for italic)</label><input type="text" id="aboutTitleInput"/></div>
+      <div class="edit-field"><label>Paragraphs (each on new line, use &lt;strong&gt; for bold)</label><textarea id="aboutTextsInput" style="min-height:120px"></textarea></div>
+      <div class="edit-field"><label>Skills (comma-separated)</label><textarea id="skillsInput" style="min-height:60px"></textarea></div>
     </div>
-    <div class="about-body">
-      <p>
-        I'm <strong>Mattia</strong>, a researcher and analyst based in Florence.
-        I work with electoral and spatial data, combining GIS tools with
-        statistical analysis to understand how political behaviour varies
-        across urban and suburban territories.
-      </p>
-      <p>
-        My current focus is on <strong>Florence and Sesto Fiorentino</strong>,
-        where I am building a granular database of voting results at the
-        sezione elettorale level across multiple elections — from the 2024
-        Comunali to the 2025 Regionali.
-      </p>
-      <p>
-        I work primarily in <strong>R</strong> for data processing and spatial
-        joins, <strong>QGIS and ArcGIS Pro</strong> for cartography, and
-        open-web tools for interactive publishing.
-      </p>
-      <div class="skills-list">
-        <span class="skill-tag">R / sf / tidyr</span>
-        <span class="skill-tag">QGIS</span>
-        <span class="skill-tag">ArcGIS Pro</span>
-        <span class="skill-tag">Spatial Analysis</span>
-        <span class="skill-tag">Electoral Data</span>
-        <span class="skill-tag">Leaflet.js</span>
-        <span class="skill-tag">GeoPackage</span>
-        <span class="skill-tag">Geocoding</span>
-      </div>
+
+    <div class="edit-section">
+      <div class="edit-section-title">Contact Section</div>
+      <div class="edit-field"><label>Description</label><textarea id="contactDescInput"></textarea></div>
     </div>
-  </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-label" style="justify-content:center">Get in touch</div>
-    <h2>Let's <em>talk.</em></h2>
-    <p>
-      Interested in collaboration, data, or just want to discuss
-      electoral geography? I'm always happy to connect.
-    </p>
-    <a href="mailto:your@email.com" class="btn">your@email.com</a>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2025 Mattia Bianchi — Built with GitHub Pages</p>
-    <div class="footer-lang">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('it')">IT</button>
+    <div class="edit-section">
+      <div class="edit-section-title">Projects</div>
+      <p style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:1rem;">Add/edit/remove projects below. Click "Add Project" to add a new one.</p>
+      <div id="projectsContainer"></div>
+      <button class="add-btn" id="addProjectBtn">+ Add Project</button>
     </div>
-  </footer>
 
-  <script>
-    // Language switcher placeholder — will expand when Italian version is ready
-    function setLang(lang) {
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-      if (lang === 'it') {
-        alert('Italian version coming soon!');
-      }
+    <div class="edit-section">
+      <div class="edit-section-title">Footer</div>
+      <div class="edit-field"><label>Footer text</label><input type="text" id="footerInput"/></div>
+    </div>
+
+  </div>
+  <div class="edit-panel-footer">
+    <button class="save-btn" id="saveBtn">💾 Save & Download JSON</button>
+    <div class="import-wrap">
+      <button class="import-btn" id="importBtn">📂 Load JSON file</button>
+      <input type="file" id="fileInput" accept=".json"/>
+    </div>
+    <p class="save-notice" id="saveNotice">✓ JSON downloaded. Upload to GitHub in a <code>content.json</code> file.</p>
+  </div>
+</div>
+
+<script>
+// ── DEFAULT CONTENT ────────────────────────────────────────────────────────────
+const DEFAULT_CONTENT = {
+  name: 'Mattia Niccoli',
+  city: 'Florence',
+  email: 'your@email.com',
+  heroTag: 'Spatial Analysis · Electoral Data · GIS',
+  heroTitle: 'Maps that tell<br><em>political stories.</em>',
+  heroSub: 'I work at the intersection of geography, data, and politics — turning electoral results into spatial narratives at the finest granularity: the single sezione elettorale.',
+  aboutTitle: 'Data, maps,<br>and <em>politics.</em>',
+  aboutTexts: [
+    'I\'m <strong>Mattia Niccoli</strong>, a researcher and analyst based in <strong>Florence</strong>. I work with electoral and spatial data, combining GIS tools with statistical analysis to understand how political behaviour varies across urban and suburban territories.',
+    'My current focus is on <strong>Florence and Sesto Fiorentino</strong>, where I am building a granular database of voting results at the sezione elettorale level across multiple elections — from the 2024 Comunali to the 2025 Regionali.',
+    'I work primarily in <strong>R</strong> for data processing and spatial joins, <strong>QGIS and ArcGIS Pro</strong> for cartography, and open-web tools for interactive publishing.'
+  ],
+  skills: ['R / sf / tidyr', 'QGIS', 'ArcGIS Pro', 'Spatial Analysis', 'Electoral Data', 'Leaflet.js', 'GeoPackage', 'Geocoding'],
+  contactDesc: 'Interested in collaboration, data, or just want to discuss electoral geography? I\'m always happy to connect.',
+  footerText: '© 2025 Mattia Niccoli — Built with GitHub Pages',
+  projects: [
+    { year: '2024 — 2025', tag: 'Electoral Maps', title: 'Voting Patterns in Florence & Sesto Fiorentino', desc: 'Interactive maps at sezione elettorale level showing results, percentage shifts, and turnout across Comunali 2024 and Regionali 2025.', link: 'projects/firenze-voto-2024.html' },
+    { year: 'Coming soon', tag: 'Geocoding', title: 'Reconstructing Electoral Boundaries from Addresses', desc: 'Automating the geocoding of 6,000+ addresses to reconstruct the sezioni boundaries for Sesto Fiorentino from scratch.', link: '#' },
+    { year: 'Coming soon', tag: 'Analysis', title: 'Left-Right Shifts Across Tuscany', desc: 'A regional overview of political realignment between 2020 and 2025, with a focus on swing sezioni and turnout collapse.', link: '#' }
+  ]
+}
+
+let content = { ...DEFAULT_CONTENT }
+
+// ── LOAD CONTENT ───────────────────────────────────────────────────────────────
+async function loadContent(){
+  try{
+    const res = await fetch('content.json')
+    if(res.ok) content = await res.json()
+  }catch(e){ console.log('No content.json, using defaults') }
+  renderPage()
+}
+
+// ── RENDER PAGE ────────────────────────────────────────────────────────────────
+function renderPage(){
+  document.getElementById('heroTag').textContent = content.heroTag
+  document.getElementById('heroTitle').innerHTML = content.heroTitle
+  document.getElementById('heroSub').textContent = content.heroSub
+  document.getElementById('aboutTitle').innerHTML = content.aboutTitle
+  
+  const aboutHtml = content.aboutTexts.map(p=>`<p>${p}</p>`).join('')
+  document.getElementById('aboutContent').innerHTML = aboutHtml
+  
+  const skillsHtml = content.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')
+  document.getElementById('skillsList').innerHTML = skillsHtml
+  
+  document.getElementById('contactDesc').textContent = content.contactDesc
+  document.getElementById('contactEmail').textContent = content.email
+  document.getElementById('contactEmail').href = 'mailto:' + content.email
+  
+  document.getElementById('footerText').textContent = content.footerText
+  
+  const projectsHtml = content.projects.map(p=>`
+    <a class="project-card" href="${p.link}">
+      <div class="card-year">${p.year}</div>
+      <span class="card-tag">${p.tag}</span>
+      <h3 class="card-title">${p.title}</h3>
+      <p class="card-desc">${p.desc}</p>
+      <div class="card-arrow">View →</div>
+    </a>
+  `).join('')
+  document.getElementById('projectsGrid').innerHTML = projectsHtml
+}
+
+// ── FILL EDIT FORM ────────────────────────────────────────────────────────────
+function fillEditForm(){
+  document.getElementById('nameInput').value = content.name
+  document.getElementById('cityInput').value = content.city
+  document.getElementById('emailInput').value = content.email
+  document.getElementById('heroTagInput').value = content.heroTag
+  document.getElementById('heroTitleInput').value = content.heroTitle
+  document.getElementById('heroSubInput').value = content.heroSub
+  document.getElementById('aboutTitleInput').value = content.aboutTitle
+  document.getElementById('aboutTextsInput').value = content.aboutTexts.join('\n\n')
+  document.getElementById('skillsInput').value = content.skills.join(', ')
+  document.getElementById('contactDescInput').value = content.contactDesc
+  document.getElementById('footerInput').value = content.footerText
+  
+  renderProjectForms()
+}
+
+// ── PROJECT FORMS ────────────────────────────────────────────────────────────
+function renderProjectForms(){
+  const container = document.getElementById('projectsContainer')
+  container.innerHTML = content.projects.map((p,i)`
+    <div class="project-form">
+      <div class="edit-field"><label>Year</label><input type="text" class="proj-year" value="${p.year}" data-idx="${i}"/></div>
+      <div class="edit-field"><label>Tag</label><input type="text" class="proj-tag" value="${p.tag}" data-idx="${i}"/></div>
+      <div class="edit-field"><label>Title</label><input type="text" class="proj-title" value="${p.title}" data-idx="${i}"/></div>
+      <div class="edit-field"><label>Description</label><textarea class="proj-desc" data-idx="${i}">${p.desc}</textarea></div>
+      <div class="edit-field"><label>Link (or #)</label><input type="text" class="proj-link" value="${p.link}" data-idx="${i}"/></div>
+      <button class="remove-btn" data-idx="${i}">— Remove project</button>
+    </div>
+  `).join('')
+  
+  document.querySelectorAll('.remove-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      const idx = +e.target.dataset.idx
+      content.projects.splice(idx,1)
+      renderProjectForms()
+    })
+  })
+}
+
+// ── SAVE TO JSON ───────────────────────────────────────────────────────────────
+function saveToJSON(){
+  // Read from form inputs
+  content.name = document.getElementById('nameInput').value
+  content.city = document.getElementById('cityInput').value
+  content.email = document.getElementById('emailInput').value
+  content.heroTag = document.getElementById('heroTagInput').value
+  content.heroTitle = document.getElementById('heroTitleInput').value
+  content.heroSub = document.getElementById('heroSubInput').value
+  content.aboutTitle = document.getElementById('aboutTitleInput').value
+  content.aboutTexts = document.getElementById('aboutTextsInput').value.split('\n\n').filter(t=>t.trim())
+  content.skills = document.getElementById('skillsInput').value.split(',').map(s=>s.trim()).filter(s=>s)
+  content.contactDesc = document.getElementById('contactDescInput').value
+  content.footerText = document.getElementById('footerInput').value
+  
+  // Read project inputs
+  content.projects = []
+  document.querySelectorAll('.project-form').forEach(form=>{
+    const year = form.querySelector('.proj-year').value
+    const tag = form.querySelector('.proj-tag').value
+    const title = form.querySelector('.proj-title').value
+    const desc = form.querySelector('.proj-desc').value
+    const link = form.querySelector('.proj-link').value
+    if(year && title) content.projects.push({year,tag,title,desc,link})
+  })
+  
+  // Download JSON
+  const json = JSON.stringify(content, null, 2)
+  const blob = new Blob([json], {type:'application/json'})
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'content.json'
+  a.click()
+  
+  const notice = document.getElementById('saveNotice')
+  notice.style.display = 'block'
+  setTimeout(()=>notice.style.display='none', 4000)
+}
+
+// ── IMPORT JSON ────────────────────────────────────────────────────────────────
+document.getElementById('importBtn').addEventListener('click',()=>{
+  document.getElementById('fileInput').click()
+})
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const file = e.target.files[0]
+  if(!file) return
+  const reader = new FileReader()
+  reader.onload = evt=>{
+    try{
+      content = JSON.parse(evt.target.result)
+      fillEditForm()
+      renderPage()
+      alert('✓ JSON loaded successfully')
+    }catch(err){
+      alert('Error loading JSON: '+err.message)
     }
-  </script>
+  }
+  reader.readAsText(file)
+})
 
+// ── ADD PROJECT ────────────────────────────────────────────────────────────────
+document.getElementById('addProjectBtn').addEventListener('click',()=>{
+  content.projects.push({year:'',tag:'',title:'',desc:'',link:'#'})
+  renderProjectForms()
+})
+
+// ── EDIT PANEL TOGGLE ────────────────────────────────────────────────────────
+const editPanel = document.getElementById('editPanel')
+const editToggle = document.getElementById('editToggleBtn')
+const editClose = document.getElementById('editClose')
+
+editToggle.addEventListener('click',()=>{
+  const open = editPanel.classList.toggle('open')
+  editToggle.classList.toggle('active',open)
+  if(open) fillEditForm()
+})
+editClose.addEventListener('click',()=>{
+  editPanel.classList.remove('open')
+  editToggle.classList.remove('active')
+})
+
+document.getElementById('saveBtn').addEventListener('click',saveToJSON)
+
+// ── LANGUAGE ───────────────────────────────────────────────────────────────────
+function setLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'))
+  document.querySelectorAll(`.lang-btn`).forEach(b=>{ if(b.textContent===lang.toUpperCase()) b.classList.add('active') })
+  if(lang==='it') alert('Italian version coming soon!')
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────────
+loadContent()
+</script>
 </body>
 </html>
