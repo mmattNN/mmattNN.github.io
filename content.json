@@ -37,7 +37,7 @@
       "tag": "Electoral Maps",
       "title": "Voting Patterns in Florence & Sesto Fiorentino",
       "desc": "Interactive maps at sezione elettorale level showing vote shares, percentage shifts, and turnout across Comunali 2024 and Regionali 2025. Built with R, Leaflet.js, and GeoJSON on GitHub Pages.",
-      "link": "projects/firenze-voto-2024.html"
+      "link": "projects/elezioni-firenze/"
     },
     {
       "year": "2022 — 2024",
